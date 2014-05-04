@@ -8,7 +8,7 @@
 *.ro
 
 # generated files
-Makefile
+# Makefile
 autom4te.cache/
 bin/
 build/

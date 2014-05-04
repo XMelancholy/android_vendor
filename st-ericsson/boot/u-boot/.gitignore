@@ -41,7 +41,7 @@
 /reloc_off
 
 # ignore build output directories
-build*
+build
 
 # stgit generated dirs
 patches-*
@@ -65,4 +65,4 @@ cscope.*
 # OneNAND IPL files
 /onenand_ipl/onenand-ipl*
 /onenand_ipl/board/*/onenand*
-/onenand_ipl/board/*/*.S
+#/onenand_ipl/board/*/*.S

@@ -9,5 +9,5 @@ tags
 *.d
 u8500/include/version_str.h
 */config.mk
-*/include/config.h
+#*/include/config.h
 
