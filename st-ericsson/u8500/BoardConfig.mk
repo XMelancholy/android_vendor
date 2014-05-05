@@ -1,17 +1,117 @@
 ENABLE_ST_ERICSSON_BUILD := true
-# U8500 uses STEricsson's bootloader, not one from source
-#
-TARGET_BOARD_PLATFORM := montblanc
-TARGET_CPU_ABI := armeabi-v7a
-TARGET_CPU_ABI2 := armeabi
-TARGET_CPU_SMP := true
+
+
 TARGET_NO_BOOTLOADER := true
 TARGET_NO_RADIOIMAGE := true
+
+# Platform
+TARGET_BOARD_PLATFORM := montblanc
+TARGET_BOOTLOADER_BOARD_NAME := montblanc
+
+# Architecture
+TARGET_ARCH := arm
 TARGET_ARCH_VARIANT := armv7-a-neon
+TARGET_CPU_ABI := armeabi-v7a
+TARGET_CPU_ABI2 := armeabi
+TARGET_CPU_VARIANT := cortex-a9
+TARGET_CPU_SMP := true
+ARCH_ARM_HAVE_TLS_REGISTER := true
+
+# Partition information
+BOARD_BOOTIMAGE_PARTITION_SIZE := 0x01000000
+BOARD_RECOVERYIMAGE_PARTITION_SIZE := 0x01000000
+BOARD_SYSTEMIMAGE_PARTITION_SIZE := 655360000
+BOARD_USERDATAIMAGE_PARTITION_SIZE := 1170210816
+BOARD_CACHEIMAGE_PARTITION_SIZE := 134217728
+BOARD_MODEMIMAGE_PARTITION_SIZE := 8388608
+BOARD_MISCIMAGE_PARTITION_SIZE := 4096
+BOARD_FLASH_BLOCK_SIZE := 4096
+TARGET_USERIMAGES_USE_EXT4 := true
+
+TARGET_PARTITIONS_USE_TOC := true
+
+
+
+
+################################### Audio ################################################
+## Build ALSA-utils
+BUILD_WITH_ALSA_UTILS := true
+BOARD_USES_ALSA := true
+
+## Build ALSA-lib
+BOARD_USES_ALSA_AUDIO := true
+
+## Below line will select Lunds ANM/ADM as AudioHardwareInterface
+BOARD_USES_LD_ANM := true
+A2DP_USES_STANDARD_ANDROID_PATH := true
+
+## Builds/Uses C Audio HAL
+BOARD_USES_C_AUDIO_HAL := true
+###########################################################################################
+
+
+##################################### Bluetooth #############################################
+BOARD_HAVE_BLUETOOTH := true
+
+# For enbaling/disabling support for Latest BlueZ present
+# in vendor/st-ericsson/connectivity/bluetooth/bluez
+BOARD_HAVE_STE_BLUETOOTH := true
+#########################################################
+
+
+####################################### Camera ###############################################
+# Camera settings
+# Enable/Disable ST-Ericsson Camera
+USE_CAMERA_STUB := false
+# Camera product configuration
+STE_CAMERA_ENABLE_FEATURE_PLATFORM := u8500
+# Select Camera Sensor
+CAMERA_SET_PRIMARY_SENSOR ?= MT9P111
+CAMERA_SET_SECONDARY_SENSOR ?= MT9V113
+# Select Camera Sensor Type
+CAMERA_PRIMARY_TYPE= YUV
+CAMERA_SECONDARY_TYPE= YUV
+#################################################################################################
+
+
+############################################## WIFI ###############################################
+# Enable STE WiFi Tethering/SoftAPController
+WLAN_ENABLE_STE_WIFI_TETHERING := true
+
+# WiFi Configuration
+WPA_SUPPLICANT_VERSION := VER_0_8_X
+BOARD_WPA_SUPPLICANT_DRIVER := NL80211
+BOARD_HOSTAPD_DRIVER := NL80211
+WIFI_DRIVER_MODULE_PATH := /system/lib/modules/cw1200_wlan.ko
+WIFI_DRIVER_MODULE_NAME := cw1200_wlan
+WIFI_DRIVER_LOADER_DELAY := 1000000
+
+
+
+STE_WLAN_DRIVER := true
+WLAN_ENABLE_WAPI := true
+WLAN_SET_PLATFORM := u8500
+
+#WIFI_TEST_INTERFACE := wlan0
+#WLAN_ENABLE_OPEN_MAC_SOLUTION := true
+
+#ifeq ($(WLAN_ENABLE_OPEN_MAC_SOLUTION), true)
+#WIFI_DRIVER_MODULE_PATH := /system/lib/modules/%s/kernel/net/compat-wireless-openmac/drivers/staging/cw1200/%s.ko
+#WLAN_SET_DRIVER_MODULE_CORE_NAME := cw1200_core
+#else
+#WIFI_DRIVER_MODULE_PATH := /system/lib/modules/%s/extra/%s.ko
+#endif
+
+WLAN_ENABLE_FEATURE_CSPSA := true
+WLAN_SET_DUALBAND := false
+
+###########################################################################
+
+
+
 TARGET_USE_ST_ERICSSON_KERNEL := true
 TARGET_USE_VENDOR_RIL := true
 
-ARCH_ARM_HAVE_TLS_REGISTER := true
 MM_PACKAGE ?= $(ANDROID_BUILD_TOP)/vendor/st-ericsson/u8500/restricted
 
 TARGET_SHELL := ash
@@ -113,19 +213,7 @@ ANT_HOME=$(abspath $(TOOLS_PATH)/community/apache_ant)
 ANT4ECLIPSE_HOME=$(abspath $(TOOLS_PATH)/community/ant4eclipse)
 ################################################################################
 
-## Build ALSA-utils
-BUILD_WITH_ALSA_UTILS := true
-BOARD_USES_ALSA := true
 
-## Build ALSA-lib
-BOARD_USES_ALSA_AUDIO := true
-
-## Below line will select Lunds ANM/ADM as AudioHardwareInterface
-BOARD_USES_LD_ANM := true
-A2DP_USES_STANDARD_ANDROID_PATH := true
-
-## Builds/Uses C Audio HAL
-BOARD_USES_C_AUDIO_HAL := true
 
 ################################################################################
 # Dumpstate
@@ -145,46 +233,14 @@ STE_CODECS_IN_STAGEFRIGHT:=true
 
 ################################################################################
 
-# Kernel/Bootloader machine name
-#
-TARGET_BOOTLOADER_BOARD_NAME := montblanc
 
 # To enable AT parser plugin
 AT_PLUGIN_ON := false
 
 BOARD_GPS_LIBRARIES := libgps
 
-# Flash Partition sizes
-BOARD_RAMDISKIMAGE_PARTITION_SIZE := 10485760
-BOARD_BOOTIMAGE_PARTITION_SIZE := 8388608
 
-#BOARD_SYSTEMIMAGE_PARTITION_SIZE := 520093696
-BOARD_SYSTEMIMAGE_PARTITION_SIZE := 340787200
-BOARD_CACHEIMAGE_FILE_SYSTEM_TYPE := ext4
-#BOARD_USERDATAIMAGE_PARTITION_SIZE := 197132288
-BOARD_USERDATAIMAGE_PARTITION_SIZE := 1170210816
 
-BOARD_CACHEIMAGE_PARTITION_SIZE := 134217728
-BOARD_MODEMIMAGE_PARTITION_SIZE := 8388608
-BOARD_MISCIMAGE_PARTITION_SIZE := 4096
-
-TARGET_USERIMAGES_USE_EXT4 := true
-
-TARGET_PARTITIONS_USE_TOC := true
-
-# Erase Unit size
-BOARD_FLASH_BLOCK_SIZE := 4096
-
-# For boot.img:
-# Kernel will be loaded to this address + 0x00008000
-# Ramdisk will be loaded to this address + 0x02000000
-BOARD_KERNEL_BASE := 0
-
-BOARD_HAVE_BLUETOOTH := true
-
-# For enbaling/disabling support for Latest BlueZ present
-# in vendor/st-ericsson/connectivity/bluetooth/bluez
-BOARD_HAVE_STE_BLUETOOTH := true
 
 ###############################################################################
 
@@ -224,17 +280,7 @@ LIBLIGHTS_SET_PLATFORM := u8500
 # Set Libsensors platform
 LIBSENSORS_SET_PLATFORM := u8500
 
-# Camera settings
-# Enable/Disable ST-Ericsson Camera
-USE_CAMERA_STUB := false
-# Camera product configuration
-STE_CAMERA_ENABLE_FEATURE_PLATFORM := u8500
-# Select Camera Sensor
-CAMERA_SET_PRIMARY_SENSOR ?= MT9P111
-CAMERA_SET_SECONDARY_SENSOR ?= MT9V113
-# Select Camera Sensor Type
-CAMERA_PRIMARY_TYPE= YUV
-CAMERA_SECONDARY_TYPE= YUV
+
 
 # Select u-boot configuration
 ifeq ($(ENABLE_FEATURE_BUILD_HBTS),true)
@@ -407,30 +453,6 @@ TARGET_HW:=hrefp_v22_v1x_db8500b0_secst_1ghz_glacier_hz3
 
 # Enable build of fm radio vendor library
 FMRADIO_CG2900_ENABLE_FEATURE_VENDOR_DRIVE := true
-
-# Enable STE WiFi Tethering/SoftAPController
-WLAN_ENABLE_STE_WIFI_TETHERING := true
-
-# WiFi Configuration
-WLAN_ENABLE_OPEN_MAC_SOLUTION := true
-WPA_SUPPLICANT_VERSION := VER_0_8_X
-BOARD_WPA_SUPPLICANT_DRIVER := NL80211
-STE_WLAN_DRIVER := true
-WLAN_ENABLE_WAPI := true
-
-WLAN_SET_PLATFORM := u8500
-
-ifeq ($(WLAN_ENABLE_OPEN_MAC_SOLUTION), true)
-WIFI_DRIVER_MODULE_PATH := /system/lib/modules/%s/kernel/net/compat-wireless-openmac/drivers/staging/cw1200/%s.ko
-WLAN_SET_DRIVER_MODULE_CORE_NAME := cw1200_core
-else
-WIFI_DRIVER_MODULE_PATH := /system/lib/modules/%s/extra/%s.ko
-endif
-
-WIFI_DRIVER_MODULE_NAME := cw1200_wlan
-WIFI_TEST_INTERFACE := wlan0
-WLAN_ENABLE_FEATURE_CSPSA := true
-WLAN_SET_DUALBAND := false
 
 # ISSW Configuration
 ISSW_ENABLE_FEATURE_SIGN_IMAGES ?= false
